@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:karma/common/splash.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:karma/pages/buy.dart';
+import 'package:karma/auth/auth_Manager.dart';
 import 'package:karma/pages/mainpage.dart';
 // import 'package:karma/router.dart';
 
@@ -23,7 +22,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
-      home: MainPage(),
+      home: AuthManager(),
     );
   }
 }

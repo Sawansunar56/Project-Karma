@@ -11,16 +11,8 @@ class LandingPage extends StatefulWidget {
 }
 
 class _LandingPageState extends State<LandingPage> {
-  int _counter = 0;
-
   void navigateToNextPage(BuildContext context) {
     Navigator.pushNamed(context, NextPage.routeName);
-  }
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
   }
 
   @override
@@ -44,8 +36,9 @@ class _LandingPageState extends State<LandingPage> {
               ),
             ),
             TextButton(
-                onPressed: () => navigateToNextPage(context),
-                child: (Text('gcdvj')))
+              onPressed: () => navigateToNextPage(context),
+              child: Text('gcdvj'),
+            )
           ],
         ),
       ), // This trailing comma makes auto-formatting nicer for build methods.

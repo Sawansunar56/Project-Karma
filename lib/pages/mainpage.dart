@@ -67,44 +67,44 @@ class _MainPageState extends State<MainPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('KARMA'),
-        actions: [
-          PopupMenuButton(
-            itemBuilder: (context) => [
-              PopupMenuItem(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(_userName),
-                    Text(_userEmail),
-                    const SizedBox(height: 8),
-                    Text('Address: $_userAddress'),
-                    const SizedBox(height: 8),
-                    Text('Description: $_userDescription'),
-                    const SizedBox(height: 8),
-                    TextFormField(
-                      initialValue: _userAddress,
-                      decoration: InputDecoration(
-                        labelText: 'Update Address',
-                      ),
-                      onFieldSubmitted: (value) {
-                        _updateUserAddress(value);
-                      },
+        leading: PopupMenuButton(
+          itemBuilder: (context) => [
+            PopupMenuItem(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(_userName),
+                  Text(_userEmail),
+                  const SizedBox(height: 8),
+                  Text('Address: $_userAddress'),
+                  const SizedBox(height: 8),
+                  Text('Description: $_userDescription'),
+                  const SizedBox(height: 8),
+                  TextFormField(
+                    initialValue: _userAddress,
+                    decoration: InputDecoration(
+                      labelText: 'Update Address',
                     ),
-                    const SizedBox(height: 8),
-                    TextFormField(
-                      initialValue: _userDescription,
-                      decoration: InputDecoration(
-                        labelText: 'Update Description',
-                      ),
-                      onFieldSubmitted: (value) {
-                        _updateUserDescription(value);
-                      },
+                    onFieldSubmitted: (value) {
+                      _updateUserAddress(value);
+                    },
+                  ),
+                  const SizedBox(height: 8),
+                  TextFormField(
+                    initialValue: _userDescription,
+                    decoration: InputDecoration(
+                      labelText: 'Update Description',
                     ),
-                  ],
-                ),
+                    onFieldSubmitted: (value) {
+                      _updateUserDescription(value);
+                    },
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
+        ),
+        actions: [
           PopupMenuButton<String>(
             onSelected: (value) {
               //  logic for each menu item here

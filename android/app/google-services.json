@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "844871397969",
-    "project_id": "karma-bbf57",
-    "storage_bucket": "karma-bbf57.appspot.com"
+    "project_number": "880450388333",
+    "project_id": "karma-9015f",
+    "storage_bucket": "karma-9015f.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:844871397969:android:bce6936b912facf5543e70",
+        "mobilesdk_app_id": "1:880450388333:android:0accb2434b64425cabda64",
         "android_client_info": {
           "package_name": "com.example.karma"
         }
       },
       "oauth_client": [
         {
-          "client_id": "844871397969-v2iq209k1oeasn0r9k68dapnmn3pk8sb.apps.googleusercontent.com",
+          "client_id": "880450388333-jggpg5iv8585h4nll6pse3qguvrn7cof.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBQvQ250PWaKeMu79kdU20VjfMGZSA7kXw"
+          "current_key": "AIzaSyB_I1rrbipqWnymjSluNKPo2ULG1MY1wPI"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "844871397969-v2iq209k1oeasn0r9k68dapnmn3pk8sb.apps.googleusercontent.com",
+              "client_id": "880450388333-jggpg5iv8585h4nll6pse3qguvrn7cof.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

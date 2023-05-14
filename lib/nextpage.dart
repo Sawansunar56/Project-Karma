@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:karma/common/customBtn.dart';
+
 class NextPage extends StatefulWidget {
-  static const routeName='/nextpage';
-  const NextPage ({Key? key}):super(key: key);
-
-
+  static const routeName = '/nextpage';
+  const NextPage({Key? key}) : super(key: key);
 
   @override
   State<NextPage> createState() => _NextPageState();
@@ -12,7 +11,6 @@ class NextPage extends StatefulWidget {
 
 class _NextPageState extends State<NextPage> {
   int _counter = 0;
-
 
   void _incrementCounter() {
     setState(() {
@@ -28,15 +26,14 @@ class _NextPageState extends State<NextPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             const Text(
-              'KARMA is a BITCH', style: TextStyle(
-              color: Colors.red,
-              fontSize: 50,
+              'KARMA is a BITCH',
+              style: TextStyle(
+                color: Colors.red,
+                fontSize: 50,
+              ),
             ),
-            ),
-
           ],
         ),
-
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }

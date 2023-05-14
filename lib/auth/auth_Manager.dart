@@ -12,13 +12,6 @@ class AuthManager extends StatefulWidget {
 }
 
 class _AuthManagerState extends State<AuthManager> {
-  bool showLoginPage = true;
-  void toggleScreen() {
-    setState(() {
-      showLoginPage = !showLoginPage;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
