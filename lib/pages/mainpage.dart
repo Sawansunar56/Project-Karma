@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:karma/auth/auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -15,8 +16,8 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   late String _userName = '';
   late String _userEmail = '';
-  late String _userAddress = '';
-  late String _userDescription = '';
+  late String _userPhone = '';
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
   void initState() {
@@ -25,26 +26,35 @@ class _MainPageState extends State<MainPage> {
   }
 
   Future<void> _fetchUserInfo() async {
-    final db = FirebaseFirestore.instance;
-    final userDoc = await db.collection('users').doc('userID').get();
-    final user = userDoc.data() as Map<String, dynamic>?;
+    final User? curUser = _auth.currentUser;
+    final CollectionReference usersCollection =
+        FirebaseFirestore.instance.collection('users');
+    if (curUser != null) {
+      final DocumentSnapshot userSnapshot =
+          await usersCollection.doc(curUser!.uid).get();
 
-    if (user != null) {
-      setState(() {
-        _userName = user['name'] ?? '';
-        _userEmail = user['email'] ?? '';
-        _userAddress = user['address'] ?? '';
-        _userDescription = user['description'] ?? '';
-      });
+      if (userSnapshot.exists) {
+        final userData = userSnapshot.data() as Map<String, dynamic>;
+        print(userData);
+      }
     }
+    // final userDoc = await FirebaseFirestore.instance
+    //     .collection('users')
+    //     .doc(curUser!.uid)
+    //     .get();
+    // final user = userDoc!.data() as Map<String, dynamic>;
+
+    // print(user);
+    // print(curUser.uid);
+    // if (user != null) {
+    //   setState(() {});
+    // }
   }
 
   Future<void> _updateUserAddress(String address) async {
     final db = FirebaseFirestore.instance;
     await db.collection('users').doc('userID').update({'address': address});
-    setState(() {
-      _userAddress = address;
-    });
+    setState(() {});
   }
 
   Future<void> _updateUserDescription(String description) async {
@@ -53,9 +63,7 @@ class _MainPageState extends State<MainPage> {
         .collection('users')
         .doc('userID')
         .update({'description': description});
-    setState(() {
-      _userDescription = description;
-    });
+    setState(() {});
   }
 
   Future<void> signOut() async {
@@ -67,70 +75,33 @@ class _MainPageState extends State<MainPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('KARMA'),
-        leading: PopupMenuButton(
-          itemBuilder: (context) => [
-            PopupMenuItem(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(_userName),
-                  Text(_userEmail),
-                  const SizedBox(height: 8),
-                  Text('Address: $_userAddress'),
-                  const SizedBox(height: 8),
-                  Text('Description: $_userDescription'),
-                  const SizedBox(height: 8),
-                  TextFormField(
-                    initialValue: _userAddress,
-                    decoration: InputDecoration(
-                      labelText: 'Update Address',
-                    ),
-                    onFieldSubmitted: (value) {
-                      _updateUserAddress(value);
-                    },
-                  ),
-                  const SizedBox(height: 8),
-                  TextFormField(
-                    initialValue: _userDescription,
-                    decoration: InputDecoration(
-                      labelText: 'Update Description',
-                    ),
-                    onFieldSubmitted: (value) {
-                      _updateUserDescription(value);
-                    },
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
         actions: [
-          PopupMenuButton<String>(
-            onSelected: (value) {
-              //  logic for each menu item here
-              if (value == 'block') {
-                // Code to block user
-              } else if (value == 'display_profile') {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) =>
-                        ProfilePage())); // Assuming you have a ProfilePage defined
-              }
-            },
-            itemBuilder: (BuildContext context) {
-              return {'Update Profile', ''}.map((String choice) {
-                return PopupMenuItem<String>(
-                  value: choice.toLowerCase().replaceAll(' ', '_'),
-                  child: Text(choice),
-                );
-              }).toList();
-            },
-          ),
+          // PopupMenuButton<String>(
+          //   onSelected: (value) {
+          //     //  logic for each menu item here
+          //     if (value == 'block') {
+          //       // Code to block user
+          //     } else if (value == 'display_profile') {
+          //       Navigator.of(context).push(MaterialPageRoute(
+          //           builder: (context) =>
+          //               ProfilePage())); // Assuming you have a ProfilePage defined
+          //     }
+          //   },
+          //   itemBuilder: (BuildContext context) {
+          //     return {'Update Profile', ''}.map((String choice) {
+          //       return PopupMenuItem<String>(
+          //         value: choice.toLowerCase().replaceAll(' ', '_'),
+          //         child: Text(choice),
+          //       );
+          //     }).toList();
+          //   },
+          // ),
           IconButton(
             onPressed: () {
               Navigator.of(context)
                   .push(MaterialPageRoute(builder: ((context) => BuyPage())));
             },
-            icon: const Icon(Icons.shopping_cart),
+            icon: const Icon(Icons.card_travel),
           ),
           IconButton(
             onPressed: () {
@@ -138,6 +109,24 @@ class _MainPageState extends State<MainPage> {
                   .push(MaterialPageRoute(builder: ((context) => SellPage())));
             },
             icon: const Icon(Icons.monetization_on),
+          ),
+          PopupMenuButton(
+            onSelected: (result) {
+              if (result == 1) {
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: ((context) => ProfilePage())));
+              }
+            },
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                value: 0,
+                child: Text("Buy Page"),
+              ),
+              PopupMenuItem(
+                value: 1,
+                child: Text("Profile"),
+              ),
+            ],
           ),
         ],
       ),

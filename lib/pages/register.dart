@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:karma/auth/auth.dart';
 
 class Register extends StatefulWidget {
   final VoidCallback showLoginPage;
@@ -33,18 +34,26 @@ class _RegisterState extends State<Register> {
   Future<void> signup() async {
     try {
       if (passwordConfirmed()) {
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: emailController.text.trim(),
-          password: passwordController.text.trim(),
+        Auth().createUserWithEmailAndPassword(
+          email: emailController.text,
+          password: passwordController.text,
+          fullName: fullnameController.text,
+          phone: phNumberController.text,
         );
+        // final UserCredential currentUser =
+        //     await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        //   email: emailController.text.trim(),
+        //   password: passwordController.text.trim(),
+        // );
         // After successful sign up
         // Navigator.pushReplacementNamed(context, '/create_profile');
-        addUserDetails(
-          fullnameController.text.trim(),
-          phNumberController.text.trim(),
-          passwordController.text.trim(),
-          emailController.text.trim(),
-        );
+        // addUserDetails(
+        //   fullnameController.text.trim(),
+        //   phNumberController.text.trim(),
+        //   passwordController.text.trim(),
+        //   emailController.text.trim(),
+        //   currentUser.user!.uid,
+        // );
       } else {
         showDialog(
           context: context,
@@ -78,13 +87,14 @@ class _RegisterState extends State<Register> {
     }
   }
 
-  Future addUserDetails(
-      String fullName, String phoneNumber, String pass, String email) async {
+  Future addUserDetails(String fullName, String phoneNumber, String pass,
+      String email, String uid) async {
     await FirebaseFirestore.instance.collection('users').add({
       'fullname': fullName,
       'phoneNumber': phoneNumber,
       'email': email,
-      'password': pass
+      'password': pass,
+      'uid': uid
     });
   }
 

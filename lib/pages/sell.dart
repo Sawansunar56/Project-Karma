@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:karma/pages/product.dart';
+import 'package:karma/pages/add_product.dart';
+import 'package:karma/pages/product_edit.dart';
 
 class SellPage extends StatefulWidget {
   SellPage({Key? key}) : super(key: key);
@@ -12,15 +13,6 @@ class SellPage extends StatefulWidget {
 
 class _SellPage extends State<SellPage> {
   final FirebaseAuth auth = FirebaseAuth.instance;
-
-  Future<void> addProduct() async {
-    final User? user = auth.currentUser;
-    await FirebaseFirestore.instance.collection('products').add({
-      'userId': user?.uid,
-      'Product Name': 'I have ',
-      'Cost': '20000',
-    });
-  }
 
   // Only produces a snapshot of the products that have the current users id.
   Stream<QuerySnapshot> getDataStream() {
@@ -57,8 +49,8 @@ class _SellPage extends State<SellPage> {
           return ListView.builder(
             itemCount: products.length,
             itemBuilder: (context, index) {
-              final User? user = auth.currentUser;
               final product = products[index].data() as Map<String, dynamic>;
+              final productId = products[index].reference.id;
               print(products);
 
               return ListTile(
@@ -71,7 +63,7 @@ class _SellPage extends State<SellPage> {
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: ((context) =>
-                          ProductDetailsPage(product: product)),
+                          ProductEditPage(product: product, uid: productId)),
                     ),
                   );
                 },
@@ -81,7 +73,10 @@ class _SellPage extends State<SellPage> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: addProduct,
+        onPressed: () {
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => AddProductPage()));
+        },
         child: const Icon(Icons.monetization_on),
       ),
     );
