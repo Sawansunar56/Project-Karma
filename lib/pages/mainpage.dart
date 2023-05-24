@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:karma/auth/auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:karma/pages/buy_status.dart';
 import 'package:karma/pages/profile.dart';
 import 'buy.dart';
 import 'sell.dart';
@@ -112,7 +113,10 @@ class _MainPageState extends State<MainPage> {
           ),
           PopupMenuButton(
             onSelected: (result) {
-              if (result == 1) {
+              if (result == 0) {
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: ((context) => BuyStatusPage())));
+              } else if (result == 1) {
                 Navigator.of(context).push(
                     MaterialPageRoute(builder: ((context) => ProfilePage())));
               }

@@ -11,10 +11,19 @@ class AddProductPage extends StatelessWidget {
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _costController = TextEditingController();
 
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _descriptionController.dispose();
+    _costController.dispose();
+  }
+
   Future<void> addProduct() async {
     final User? user = auth.currentUser;
     await FirebaseFirestore.instance.collection('products').add({
-      'userId': user?.uid,
+      'sellerId': user?.uid,
+      'buyerId': '',
+      'status': 'available',
       'productName': _nameController.text,
       'productCost': _costController.text,
       'productDescription': _descriptionController.text,
@@ -56,7 +65,12 @@ class AddProductPage extends StatelessWidget {
             SizedBox(
               height: 80,
             ),
-            ElevatedButton(onPressed: () {}, child: Text("Add Product"))
+            ElevatedButton(
+                onPressed: () {
+                  addProduct();
+                  Navigator.of(context).pop();
+                },
+                child: Text("Add Product"))
           ],
         ),
       ),

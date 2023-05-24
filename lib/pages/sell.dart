@@ -19,7 +19,7 @@ class _SellPage extends State<SellPage> {
     final User? user = auth.currentUser;
     return FirebaseFirestore.instance
         .collection('products')
-        .where("userId", isEqualTo: user?.uid)
+        .where("sellerId", isEqualTo: user?.uid)
         .snapshots();
   }
 
@@ -54,9 +54,9 @@ class _SellPage extends State<SellPage> {
               print(products);
 
               return ListTile(
-                title: Text("${product['Cost']}"),
-                subtitle: Text("${product['Product Name']}"),
-                trailing: Text('${product['userId']}'),
+                title: Text("${product['productName']}"),
+                subtitle: Text("${product['productDescription']}"),
+                trailing: Text('${product['productCost']}'),
                 onTap: () {
                   // navigate to product details page
                   print(product);

@@ -1,22 +1,30 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProductDetailsPage extends StatelessWidget {
   final Map<String, dynamic> product;
+  final String productId;
 
-  saveCartProducts(String data) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    var cartProducts = prefs.getStringList("cartProducts");
-    prefs.setStringList("cartProducts", [...?cartProducts, data]);
+  const ProductDetailsPage(
+      {Key? key, required this.product, required this.productId})
+      : super(key: key);
+
+  buyProduct() async {
+    final productSnapshot = await FirebaseFirestore.instance
+        .collection('productSnapshot')
+        .doc(productId)
+        .get();
+    if (productSnapshot.exists) {
+      final product = productSnapshot.data() as Map<String, dynamic>;
+    }
   }
-
-  const ProductDetailsPage({Key? key, required this.product}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(product['Product Name']),
+        title: Text(product['productName']),
       ),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
@@ -26,20 +34,20 @@ class ProductDetailsPage extends StatelessWidget {
             // Image.network(product['imageUrl']),
             const SizedBox(height: 20),
             Text(
-              product['Product Name'],
+              product['productName'],
               // style: Theme.of(context).textTheme.headline6,
             ),
             const SizedBox(height: 10),
             Text(
-              '\$${product['Cost']}',
+              '\$${product['productCost']}',
               // style: Theme.of(context).textTheme.subtitle1,
             ),
             const SizedBox(height: 20),
-            Text(product['userId']),
+            Text(product['sellerId']),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                saveCartProducts(product['Product Name']);
+                buyProduct();
               },
               // add product to cart
               child: Text('Buy'),

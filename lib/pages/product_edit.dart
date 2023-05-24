@@ -7,47 +7,77 @@ class ProductEditPage extends StatelessWidget {
   final String uid;
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _costController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
 
   ProductEditPage({Key? key, required this.product, required this.uid})
       : super(key: key);
 
   updateProduct() async {
     await FirebaseFirestore.instance.collection('products').doc(uid).update({
-      'Product Name': _nameController.text,
-      'Cost': _costController.text,
+      'productName': _nameController.text,
+      'productCost': _costController.text,
+      'productDescription': _descriptionController.text,
     });
+  }
+
+  deleteProduct() async {
+    await FirebaseFirestore.instance.collection('products').doc(uid).delete();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(product['Product Name']),
+        title: Text(product['productName']),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          // Image.network(product['imageUrl']),
-          const SizedBox(height: 20),
-          TextField(
-              controller: _nameController..text = product['Product Name']),
-          const SizedBox(height: 10),
-          TextField(controller: _costController..text = product['Cost']
-              // style: Theme.of(context).textTheme.subtitle1,
-              ),
-          const SizedBox(height: 20),
-          Text(product['userId']),
-          const SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: () async {
-              final navigator = Navigator.of(context);
-              await updateProduct();
-              navigator.pop();
-            },
-            // add product to cart
-            child: Text('Update Product'),
-          ),
-        ],
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // Image.network(product['imageUrl']),
+            const SizedBox(height: 20),
+            TextField(
+              controller: _nameController..text = product['productName'],
+              decoration: InputDecoration(
+                  border: OutlineInputBorder(), labelText: "Product Name"),
+            ),
+            const SizedBox(height: 10),
+            TextField(
+                controller: _costController..text = product['productCost'],
+                decoration: InputDecoration(
+                    labelText: "Product Cost", border: OutlineInputBorder())),
+            const SizedBox(height: 20),
+            TextField(
+                controller: _descriptionController
+                  ..text = product['productDescription'],
+                decoration: InputDecoration(
+                    labelText: "Product Description",
+                    border: OutlineInputBorder())),
+            const SizedBox(height: 20),
+
+            Text("Status: ${product['status']}"),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () async {
+                final navigator = Navigator.of(context);
+                await updateProduct();
+                navigator.pop();
+              },
+              // add product to cart
+              child: Text('Update Product'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                final navigator = Navigator.of(context);
+                await deleteProduct();
+                navigator.pop();
+              },
+              // add product to cart
+              child: Text('Delete Product'),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -43,17 +43,18 @@ class _BuyPageState extends State<BuyPage> {
             itemCount: products.length,
             itemBuilder: (context, index) {
               final product = products[index].data() as Map<String, dynamic>;
+              final productId = products[index].reference.id;
               return ListTile(
-                title: Text("${product['Cost']}"),
-                subtitle: Text("${product['Product Name']}"),
-                trailing: Text('${product['userId']}'),
+                title: Text("${product['productName']}"),
+                subtitle: Text("${product['productDescription']}"),
+                trailing: Text('${product['productCost']}'),
                 onTap: () {
                   // navigate to product details page
                   print(product);
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: ((context) =>
-                          ProductDetailsPage(product: product)),
+                      builder: ((context) => ProductDetailsPage(
+                          product: product, productId: productId)),
                     ),
                   );
                 },

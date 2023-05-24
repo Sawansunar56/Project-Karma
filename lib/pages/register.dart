@@ -17,8 +17,8 @@ class _RegisterState extends State<Register> {
   final TextEditingController confirmpassController = TextEditingController();
   final TextEditingController fullnameController = TextEditingController();
   final TextEditingController phNumberController = TextEditingController();
-  // final TextEditingController lnameController = TextEditingController();
-  // final TextEditingController unameController = TextEditingController();
+  final TextEditingController addressController = TextEditingController();
+  final TextEditingController descriptionController = TextEditingController();
 
   static const Color firstColor = Color(0xFF703EFE);
   static const Color secondColor = Color(0xFF0A0057);
@@ -27,7 +27,11 @@ class _RegisterState extends State<Register> {
   void dispose() {
     emailController.dispose();
     passwordController.dispose();
-    // fullnameController.dispose();
+    confirmpassController.dispose();
+    phNumberController.dispose();
+    addressController.dispose();
+    descriptionController.dispose();
+    fullnameController.dispose();
     super.dispose();
   }
 
@@ -39,6 +43,8 @@ class _RegisterState extends State<Register> {
           password: passwordController.text,
           fullName: fullnameController.text,
           phone: phNumberController.text,
+          address: addressController.text,
+          description: descriptionController.text,
         );
         // final UserCredential currentUser =
         //     await FirebaseAuth.instance.createUserWithEmailAndPassword(
@@ -87,16 +93,16 @@ class _RegisterState extends State<Register> {
     }
   }
 
-  Future addUserDetails(String fullName, String phoneNumber, String pass,
-      String email, String uid) async {
-    await FirebaseFirestore.instance.collection('users').add({
-      'fullname': fullName,
-      'phoneNumber': phoneNumber,
-      'email': email,
-      'password': pass,
-      'uid': uid
-    });
-  }
+  // Future addUserDetails(String fullName, String phoneNumber, String pass,
+  //     String email, String uid) async {
+  //   await FirebaseFirestore.instance.collection('users').add({
+  //     'fullname': fullName,
+  //     'phoneNumber': phoneNumber,
+  //     'email': email,
+  //     'password': pass,
+  //     'uid': uid
+  //   });
+  // }
 
   bool passwordConfirmed() {
     if (passwordController.text.trim() == confirmpassController.text.trim()) {
@@ -251,6 +257,46 @@ class _RegisterState extends State<Register> {
                     // obscureText: true,
                     decoration: const InputDecoration(
                       hintText: 'Confirm Password',
+                      hintStyle: TextStyle(
+                        color: Colors.white,
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white, width: 1.0),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blue, width: 2.0),
+                      ),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.red),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16.0),
+                  TextField(
+                    controller: addressController,
+                    // obscureText: true,
+                    decoration: const InputDecoration(
+                      hintText: 'Address',
+                      hintStyle: TextStyle(
+                        color: Colors.white,
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white, width: 1.0),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blue, width: 2.0),
+                      ),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.red),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16.0),
+                  TextField(
+                    controller: descriptionController,
+                    // obscureText: true,
+                    decoration: const InputDecoration(
+                      hintText: 'Description',
                       hintStyle: TextStyle(
                         color: Colors.white,
                       ),
