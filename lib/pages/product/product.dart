@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -11,13 +12,11 @@ class ProductDetailsPage extends StatelessWidget {
       : super(key: key);
 
   buyProduct() async {
+    final String userId = FirebaseAuth.instance.currentUser!.uid.toString();
     final productSnapshot = await FirebaseFirestore.instance
-        .collection('productSnapshot')
+        .collection('products')
         .doc(productId)
-        .get();
-    if (productSnapshot.exists) {
-      final product = productSnapshot.data() as Map<String, dynamic>;
-    }
+        .update({"buyerId": userId, "status": "waiting"});
   }
 
   @override

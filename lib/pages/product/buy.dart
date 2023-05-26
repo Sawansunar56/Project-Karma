@@ -1,25 +1,28 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:karma/pages/add_product.dart';
-import 'package:karma/pages/product_edit.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:karma/pages/product/product.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class SellPage extends StatefulWidget {
-  SellPage({Key? key}) : super(key: key);
+class BuyPage extends StatefulWidget {
+  BuyPage({Key? key}) : super(key: key);
 
   @override
-  _SellPage createState() => _SellPage();
+  _BuyPageState createState() => _BuyPageState();
 }
 
-class _SellPage extends State<SellPage> {
-  final FirebaseAuth auth = FirebaseAuth.instance;
+class _BuyPageState extends State<BuyPage> {
+  getCrate() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    print(prefs.getStringList("cartProducts"));
+  }
 
-  // Only produces a snapshot of the products that have the current users id.
   Stream<QuerySnapshot> getDataStream() {
-    final User? user = auth.currentUser;
+    final String userId = FirebaseAuth.instance.currentUser!.uid.toString();
     return FirebaseFirestore.instance
         .collection('products')
-        .where("sellerId", isEqualTo: user?.uid)
+        .where("sellerId", isNotEqualTo: userId)
+        .where("status", isEqualTo: "available")
         .snapshots();
   }
 
@@ -27,7 +30,7 @@ class _SellPage extends State<SellPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Sell Products'),
+        title: const Text('Buy Products'),
       ),
       body: StreamBuilder(
         stream: getDataStream(),
@@ -51,19 +54,16 @@ class _SellPage extends State<SellPage> {
             itemBuilder: (context, index) {
               final product = products[index].data() as Map<String, dynamic>;
               final productId = products[index].reference.id;
-              print(products);
-
               return ListTile(
                 title: Text("${product['productName']}"),
                 subtitle: Text("${product['productDescription']}"),
                 trailing: Text('${product['productCost']}'),
                 onTap: () {
                   // navigate to product details page
-                  print(product);
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: ((context) =>
-                          ProductEditPage(product: product, uid: productId)),
+                      builder: ((context) => ProductDetailsPage(
+                          product: product, productId: productId)),
                     ),
                   );
                 },
@@ -72,13 +72,8 @@ class _SellPage extends State<SellPage> {
           );
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => AddProductPage()));
-        },
-        child: const Icon(Icons.monetization_on),
-      ),
+      floatingActionButton:
+          FloatingActionButton(onPressed: getCrate, child: Icon(Icons.abc)),
     );
   }
 }

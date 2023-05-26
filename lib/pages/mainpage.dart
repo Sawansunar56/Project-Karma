@@ -2,10 +2,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:karma/auth/auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:karma/pages/buy_status.dart';
+import 'package:karma/pages/orders_placed.dart';
 import 'package:karma/pages/profile.dart';
-import 'buy.dart';
-import 'sell.dart';
+import 'package:karma/pages/request_page.dart';
+import 'product/buy.dart';
+import 'product/sell.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -115,7 +116,10 @@ class _MainPageState extends State<MainPage> {
             onSelected: (result) {
               if (result == 0) {
                 Navigator.of(context).push(
-                    MaterialPageRoute(builder: ((context) => BuyStatusPage())));
+                    MaterialPageRoute(builder: ((context) => OrdersPlaced())));
+              } else if (result == 2) {
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: ((context) => RequestPage())));
               } else if (result == 1) {
                 Navigator.of(context).push(
                     MaterialPageRoute(builder: ((context) => ProfilePage())));
@@ -124,7 +128,11 @@ class _MainPageState extends State<MainPage> {
             itemBuilder: (context) => [
               PopupMenuItem(
                 value: 0,
-                child: Text("Buy Page"),
+                child: Text("Orders Placed"),
+              ),
+              PopupMenuItem(
+                value: 2,
+                child: Text("Request Page"),
               ),
               PopupMenuItem(
                 value: 1,

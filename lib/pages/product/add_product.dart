@@ -22,7 +22,7 @@ class AddProductPage extends StatelessWidget {
     final User? user = auth.currentUser;
     await FirebaseFirestore.instance.collection('products').add({
       'sellerId': user?.uid,
-      'buyerId': '',
+      'buyerId': "unknown",
       'status': 'available',
       'productName': _nameController.text,
       'productCost': _costController.text,
