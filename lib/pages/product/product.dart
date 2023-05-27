@@ -30,7 +30,10 @@ class ProductDetailsPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Image.network(product['imageUrl']),
+            SizedBox(
+                height: 200,
+                width: 200,
+                child: Image.network(product['productImage'])),
             const SizedBox(height: 20),
             Text(
               product['productName'],
@@ -38,11 +41,11 @@ class ProductDetailsPage extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Text(
-              '\$${product['productCost']}',
+              '\₹ ${product["productCost"]}',
               // style: Theme.of(context).textTheme.subtitle1,
             ),
             const SizedBox(height: 20),
-            Text(product['sellerId']),
+            Text(product['productDescription']),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {

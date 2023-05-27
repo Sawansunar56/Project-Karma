@@ -51,7 +51,6 @@ class _SellPage extends State<SellPage> {
             itemBuilder: (context, index) {
               final product = products[index].data() as Map<String, dynamic>;
               final productId = products[index].reference.id;
-              print(products);
 
               return ListTile(
                 title: Text("${product['productName']}"),
@@ -59,7 +58,6 @@ class _SellPage extends State<SellPage> {
                 trailing: Text('${product['productCost']}'),
                 onTap: () {
                   // navigate to product details page
-                  print(product);
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: ((context) =>

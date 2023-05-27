@@ -32,10 +32,12 @@ class ProductEditPage extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+        child: ListView(
           children: [
-            // Image.network(product['imageUrl']),
+            SizedBox(
+                height: 200,
+                width: 200,
+                child: Image.network(product['productImage'])),
             const SizedBox(height: 20),
             TextField(
               controller: _nameController..text = product['productName'],
@@ -55,7 +57,6 @@ class ProductEditPage extends StatelessWidget {
                     labelText: "Product Description",
                     border: OutlineInputBorder())),
             const SizedBox(height: 20),
-
             Text("Status: ${product['status']}"),
             const SizedBox(height: 20),
             ElevatedButton(

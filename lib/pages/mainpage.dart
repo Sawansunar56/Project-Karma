@@ -37,20 +37,8 @@ class _MainPageState extends State<MainPage> {
 
       if (userSnapshot.exists) {
         final userData = userSnapshot.data() as Map<String, dynamic>;
-        print(userData);
       }
     }
-    // final userDoc = await FirebaseFirestore.instance
-    //     .collection('users')
-    //     .doc(curUser!.uid)
-    //     .get();
-    // final user = userDoc!.data() as Map<String, dynamic>;
-
-    // print(user);
-    // print(curUser.uid);
-    // if (user != null) {
-    //   setState(() {});
-    // }
   }
 
   Future<void> _updateUserAddress(String address) async {
