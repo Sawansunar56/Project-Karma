@@ -4,13 +4,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:image_picker/image_picker.dart';
 
 class AddProductPage extends StatelessWidget {
   AddProductPage({super.key});
-  final FirebaseAuth auth = FirebaseAuth.instance;
+  final String? userId = FirebaseAuth.instance.currentUser?.uid;
+
   final TextEditingController _nameController = TextEditingController(text: "");
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _costController = TextEditingController();
@@ -23,11 +22,26 @@ class AddProductPage extends StatelessWidget {
     _costController.dispose();
   }
 
+  Future<List<String>> getUserDetails() async {
+    final CollectionReference usersCollection =
+        FirebaseFirestore.instance.collection("users");
+
+    final DocumentSnapshot userSnapshot =
+        await usersCollection.doc(userId).get();
+
+    final phoneNumber = userSnapshot.get('phone');
+    final address = userSnapshot.get("address");
+
+    return [address, phoneNumber];
+  }
+
   Future<void> addProduct() async {
-    final User? user = auth.currentUser;
     String image_url = await uploadImage();
+    List<String> userDetails = await getUserDetails();
     await FirebaseFirestore.instance.collection('products').add({
-      'sellerId': user?.uid,
+      'sellerId': userId,
+      'sellerAddress': userDetails[0],
+      'sellerNumber': userDetails[1],
       'buyerId': "unknown",
       'status': 'available',
       'productName': _nameController.text,

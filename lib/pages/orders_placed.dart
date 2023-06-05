@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:karma/pages/product/product_orders.dart';
 
 class OrdersPlaced extends StatelessWidget {
   OrdersPlaced({super.key});
@@ -11,13 +12,6 @@ class OrdersPlaced extends StatelessWidget {
         .collection('products')
         .where("buyerId", isEqualTo: userId)
         .snapshots();
-  }
-
-  Future<void> receivedProduct(String productId) async {
-    await FirebaseFirestore.instance
-        .collection("products")
-        .doc(productId)
-        .update({"status": "completion"});
   }
 
   @override
@@ -65,40 +59,11 @@ class OrdersPlaced extends StatelessWidget {
                 subtitle: Text("${product['productDescription']}"),
                 trailing: Text('${product['productCost']}'),
                 onTap: () {
-                  if (product["status"] == "waiting") {
-                    showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                              title: Text(
-                                  "Waiting Confirmation from seller. Please Wait"),
-                              actions: [
-                                ElevatedButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: Text("Ok"))
-                              ],
-                            ));
-                  } else if (product["status"] == "ongoing") {
-                    showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                              title: Text("Have you received the product"),
-                              actions: [
-                                ElevatedButton(
-                                    onPressed: () {
-                                      receivedProduct(productId);
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: Text("Yes")),
-                                ElevatedButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: Text("No"))
-                              ],
-                            ));
-                  }
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: ((context) => ProductOrders(
+                            product: product,
+                            productId: productId,
+                          ))));
                 },
               );
             },

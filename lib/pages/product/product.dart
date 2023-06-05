@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class ProductDetailsPage extends StatelessWidget {
   final Map<String, dynamic> product;
@@ -36,13 +35,19 @@ class ProductDetailsPage extends StatelessWidget {
                 child: Image.network(product['productImage'])),
             const SizedBox(height: 20),
             Text(
-              product['productName'],
+              product['productName'], style: TextStyle(fontSize: 21),
               // style: Theme.of(context).textTheme.headline6,
             ),
             const SizedBox(height: 10),
             Text(
               '\₹ ${product["productCost"]}',
+              style: TextStyle(fontSize: 16),
               // style: Theme.of(context).textTheme.subtitle1,
+            ),
+            const SizedBox(height: 20),
+            Text(
+              product['sellerNumber'],
+              style: TextStyle(letterSpacing: 1.6),
             ),
             const SizedBox(height: 20),
             Text(product['productDescription']),

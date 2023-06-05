@@ -15,6 +15,7 @@ class _ProfilePageState extends State<ProfilePage> {
   TextEditingController phoneController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
 
+  final User? user = FirebaseAuth.instance.currentUser;
   @override
   void dispose() {
     nameController.dispose();
@@ -24,8 +25,29 @@ class _ProfilePageState extends State<ProfilePage> {
     super.dispose();
   }
 
+  @override
+  void initState() {
+    super.initState();
+    getUserData();
+  }
+
+  Future<void> getUserData() async {
+    final userId = user?.uid;
+
+    final DocumentSnapshot userSnapshot =
+        await FirebaseFirestore.instance.collection('users').doc(userId).get();
+
+    if (userSnapshot.exists) {
+      setState(() {
+        nameController.text = userSnapshot.get("name") ?? '';
+        addressController.text = userSnapshot.get("address") ?? '';
+        phoneController.text = userSnapshot.get("phone") ?? '';
+        descriptionController.text = userSnapshot.get("description") ?? '';
+      });
+    }
+  }
+
   editData() async {
-    User? user = FirebaseAuth.instance.currentUser;
     final db = FirebaseFirestore.instance;
     await db.collection('users').doc(user?.uid).update({
       'description': descriptionController.text,
