@@ -46,8 +46,8 @@ class ProductDetailsPage extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             Text(
-              product['sellerNumber'],
-              style: TextStyle(letterSpacing: 1.6),
+              "Seller Number: ${product['sellerNumber']}",
+              style: TextStyle(letterSpacing: 1.0),
             ),
             const SizedBox(height: 20),
             Text(product['productDescription']),
@@ -55,6 +55,7 @@ class ProductDetailsPage extends StatelessWidget {
             ElevatedButton(
               onPressed: () {
                 buyProduct();
+                Navigator.of(context).pop();
               },
               // add product to cart
               child: Text('Buy'),

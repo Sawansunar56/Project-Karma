@@ -46,16 +46,46 @@ class _SellPage extends State<SellPage> {
 
           final products = snapshot.data!.docs;
 
-          return ListView.builder(
+          return GridView.builder(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              mainAxisSpacing: 10,
+              crossAxisSpacing: 10,
+            ),
             itemCount: products.length,
             itemBuilder: (context, index) {
               final product = products[index].data() as Map<String, dynamic>;
               final productId = products[index].reference.id;
 
-              return ListTile(
-                title: Text("${product['productName']}"),
-                subtitle: Text("${product['productDescription']}"),
-                trailing: Text('${product['productCost']}'),
+              return GestureDetector(
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5)),
+                  elevation: 2,
+                  shadowColor: Colors.black,
+                  child: Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Column(
+                      children: [
+                        Expanded(
+                          child: Container(
+                              child: Image.network(
+                            product["productImage"],
+                          )),
+                        ),
+                        SizedBox(height: 10),
+                        Text(
+                          product["productName"],
+                          style: TextStyle(fontSize: 18),
+                        ),
+                        Text(
+                          product["productType"],
+                          style: TextStyle(fontSize: 14),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
                 onTap: () {
                   // navigate to product details page
                   Navigator.of(context).push(

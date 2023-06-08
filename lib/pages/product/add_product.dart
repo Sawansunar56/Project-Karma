@@ -6,20 +6,40 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-class AddProductPage extends StatelessWidget {
+class AddProductPage extends StatefulWidget {
   AddProductPage({super.key});
+
+  @override
+  State<AddProductPage> createState() => _AddProductPageState();
+}
+
+class _AddProductPageState extends State<AddProductPage> {
   final String? userId = FirebaseAuth.instance.currentUser?.uid;
 
   final TextEditingController _nameController = TextEditingController(text: "");
+
   final TextEditingController _descriptionController = TextEditingController();
+
   final TextEditingController _costController = TextEditingController();
+
   XFile? image;
+
+  List<String> dropdownItems = ['Plastic Waste', 'Recycle Waste'];
+
+  late String selectedDropdownItem;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedDropdownItem = dropdownItems[0]; // Set the initial selected item
+  }
 
   @override
   void dispose() {
     _nameController.dispose();
     _descriptionController.dispose();
     _costController.dispose();
+    super.dispose();
   }
 
   Future<List<String>> getUserDetails() async {
@@ -48,6 +68,7 @@ class AddProductPage extends StatelessWidget {
       'productCost': _costController.text,
       'productDescription': _descriptionController.text,
       'productImage': image_url,
+      'productType': selectedDropdownItem,
     });
   }
 
@@ -105,6 +126,26 @@ class AddProductPage extends StatelessWidget {
               decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Product Description'),
+            ),
+            SizedBox(
+              height: 30,
+            ),
+            DropdownButton<String>(
+              value: selectedDropdownItem,
+              onChanged: (String? newValue) {
+                if (newValue != null) {
+                  setState(() {
+                    selectedDropdownItem = newValue;
+                  });
+                }
+              },
+              items:
+                  dropdownItems.map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
             ),
             SizedBox(
               height: 80,
